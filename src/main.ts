@@ -1,6 +1,9 @@
 import './style.css'
+import { questionNames } from './data/questionNames'
+import { createQuestionDeck, drawQuestion } from './game/questionDeck'
 
 const regions = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄']
+const questionDeck = createQuestionDeck(questionNames)
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="game-shell">
@@ -37,9 +40,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
       <section class="play-area" aria-label="ゲーム">
         <section class="question-card" aria-labelledby="question-title">
-          <h1 id="question-title">西目屋村</h1>
+          <h1 id="question-title" aria-live="polite"></h1>
           <div class="question-extra" aria-live="polite">
-            <button class="hint-button" type="button">郡名を表示</button>
+            <button class="hint-button" id="next-random-question" type="button">別の市町村を出題</button>
           </div>
         </section>
 
@@ -79,3 +82,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </details>
   </div>
 `
+
+const questionTitle = document.querySelector<HTMLHeadingElement>('#question-title')
+const nextQuestionButton = document.querySelector<HTMLButtonElement>('#next-random-question')
+
+/** 山札から次の自治体名を引いて問題欄に表示する。 */
+function showNextQuestion(): void {
+  if (questionTitle) {
+    questionTitle.textContent = drawQuestion(questionDeck)
+  }
+}
+
+nextQuestionButton?.addEventListener('click', showNextQuestion)
+showNextQuestion()
