@@ -1,9 +1,9 @@
 import './style.css'
-import { questionNames } from './data/questionNames'
+import municipalities from './data/municipalities.json'
 import { createQuestionDeck, drawQuestion } from './game/questionDeck'
 
 const regions = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄']
-const questionDeck = createQuestionDeck(questionNames)
+const questionDeck = createQuestionDeck(municipalities)
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="game-shell">
@@ -89,7 +89,7 @@ const nextQuestionButton = document.querySelector<HTMLButtonElement>('#next-rand
 /** 山札から次の自治体名を引いて問題欄に表示する。 */
 function showNextQuestion(): void {
   if (questionTitle) {
-    questionTitle.textContent = drawQuestion(questionDeck)
+    questionTitle.textContent = drawQuestion(questionDeck).name
   }
 }
 
